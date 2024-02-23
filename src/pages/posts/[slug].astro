@@ -1,0 +1,31 @@
+---
+import { sanityClient } from "sanity:client";
+import { urlForImage } from "../../sanity/urlForImage";
+
+import PortableText from "../../components/PortableText.astro";
+
+export async function getStaticPaths() {
+    const posts = await sanityClient.fetch(`*[_type == "post" && defined(slug)]{
+      ...,
+      "authorName": author->name
+    } | order(publishedAt desc)`);
+
+    return posts.map((post) => {
+      console.log(post.author.name)
+    return {
+      params: {
+        slug: post.slug?.current || '',
+      },
+      props: { ...post, imgSrc: urlForImage(post.mainImage.asset._ref).width(500).url() },
+    };
+  });
+}
+
+const { title, body, authorName, imgSrc } = Astro.props;
+---
+
+<h1>{title}</h1>
+<p>{authorName}</p>
+<img src={imgSrc} alt={title} />
+
+<PortableText portableText={body} />
