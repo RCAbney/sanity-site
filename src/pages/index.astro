@@ -1,16 +1,31 @@
 ---
 import { sanityClient } from "sanity:client";
+import { ViewTransitions } from "astro:transitions";
 
-const posts = await sanityClient.fetch(`*[_type == "post" && defined(slug)] | order(publishedAt desc)`);
+const posts = await sanityClient.fetch(
+    `*[_type == "post" && defined(slug)] | order(publishedAt desc)`
+);
 ---
 
-<h1>Blog</h1>
-<ul>
-  {posts.map((post) => (
-    <li>
-      <a href={"/posts/" + post.slug.current} class="post-link">
-        {post.title}
-      </a>
-    </li>
-  ))}
-</ul>
+<html>
+    <head>
+        <title>sanity site test</title>
+        <ViewTransitions />
+    </head>
+    <body>
+        <ul>
+            {
+                posts.map((post) => (
+                    <li>
+                        <a
+                            href={"/posts/" + post.slug.current}
+                            class="post-link"
+                        >
+                            {post.title}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </body><h1>Blog</h1>
+</html>
