@@ -4,7 +4,9 @@ import { defineConfig } from 'astro/config';
 import { sanityIntegration } from "@sanity/astro";
 
 export default defineConfig({
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true,
+  },
   integrations: [sanityIntegration({
     projectId: '90jrxj4o',
     dataset: 'production',
